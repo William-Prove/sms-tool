@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File d'envoi SMS</title>
+<style>
+  :root{
+    --ink:#1c1b19;
+    --paper:#f7f5f0;
+    --line:#dcd8cd;
+    --accent:#2f5d50;
+    --accent-soft:#e4efe9;
+    --done:#9a9587;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    padding:32px 20px 80px;
+  }
+  .wrap{max-width:640px;margin:0 auto;}
+  h1{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0 0 4px;
+  }
+  .sub{
+    color:#6b6759;
+    font-size:14px;
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+  textarea{
+    width:100%;
+    min-height:150px;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13px;
+    line-height:1.6;
+    background:#fff;
+    resize:vertical;
+  }
+  .format{
+    font-size:12px;
+    color:#8a8575;
+    margin:8px 0 20px;
+  }
+  .format code{
+    background:var(--accent-soft);
+    padding:1px 5px;
+    border-radius:4px;
+    color:var(--accent);
+  }
+  button.gen{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:11px 20px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  button.gen:hover{opacity:0.92;}
+  .counter{
+    display:inline-block;
+    margin-left:14px;
+    font-size:13px;
+    color:#6b6759;
+  }
+  .queue{margin-top:32px;display:flex;flex-direction:column;gap:10px;}
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    transition:opacity 0.2s;
+  }
+  .card.done{opacity:0.45;}
+  .checkbox{
+    width:20px;height:20px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    flex-shrink:0;
+    margin-top:2px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;
+    color:#fff;
+    background:#fff;
+  }
+  .card.done .checkbox{background:var(--done);border-color:var(--done);}
+  .content{flex:1;min-width:0;}
+  .phone{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:12.5px;
+    color:var(--accent);
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .msg{
+    font-size:13.5px;
+    line-height:1.5;
+    color:#3a3730;
+    margin-bottom:10px;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .actions a, .actions button{
+    font-size:12.5px;
+    font-weight:600;
+    padding:8px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    cursor:pointer;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .actions a.open{
+    background:var(--accent-soft);
+    color:var(--accent);
+    border-color:var(--accent-soft);
+  }
+  .empty{
+    text-align:center;
+    color:#a39e8e;
+    font-size:13px;
+    padding:40px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>File d'envoi SMS</h1>
+  <p class="sub">Colle ta liste (une ligne par prospect), génère la file, puis clique <b>« Ouvrir dans Messages »</b> pour chaque contact — le message est déjà rempli, il ne reste qu'à appuyer sur Envoyer.</p>
+
+  <textarea id="input" placeholder="0470111222;Bonjour Sophie, je m'appelle William...&#10;0470333444;Bonjour, je m'appelle William, jeune entrepreneur liégeois...">0474287359;Bonjour le/la responsable du Petit Boucher, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
+0495327615;Bonjour le/la responsable du Caroline Hair Beauty, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
+0496154851;Bonjour le/la responsable du Bi&#x27;Oh, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
+0485223153;Bonjour le/la responsable du shopping de Célia, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
+0475826413;Bonjour le/la responsable du A.a.g., je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William</textarea>
+  <div class="format">Format : <code>numéro;message</code> — un prospect par ligne. Les numéros belges commençant par 0 sont convertis automatiquement en <code>+32</code>.</div>
+
+  <button class="gen" onclick="generate()">Générer la file</button>
+  <span class="counter" id="counter"></span>
+
+  <div class="queue" id="queue"></div>
+</div>
+
+<script>
+function normalizePhone(raw){
+  var p = raw.trim().replace(/[\s.\-]/g,'');
+  if(p.indexOf('+') === 0) return p;                 // déjà au format international
+  if(p.indexOf('00') === 0) return '+' + p.slice(2); // préfixe international 00
+  if(p.indexOf('0') === 0) return '+32' + p.slice(1);// numéro belge 0471... -> +32471...
+  return '+' + p;                                    // numéro sans préfixe
+}
+
+// Construit l'URL SMS correcte selon la plateforme :
+//   iPhone  -> sms:+32...&body=texte
+//   Android -> sms:+32...?body=texte
+function smsUrl(phone, message){
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var sep = isIOS ? '&' : '?';
+  return 'sms:' + phone + sep + 'body=' + encodeURIComponent(message);
+}
+
+function copyMsg(btn, text){
+  function done(){ btn.textContent = 'Copié ✓'; setTimeout(function(){ btn.textContent = 'Copier le texte'; }, 1200); }
+  // 1) Clipboard API (nécessite HTTPS). Sur fichier local, on bascule en secours.
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done)['catch'](function(){ fallbackCopy(text, done); });
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+// Secours pour fichiers locaux (file://) : textarea cachée + execCommand
+function fallbackCopy(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  ta.style.pointerEvents = 'none';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+function generate(){
+  var raw = document.getElementById('input').value.trim();
+  var queue = document.getElementById('queue');
+  var counter = document.getElementById('counter');
+  queue.innerHTML = '';
+
+  if(!raw){
+    queue.innerHTML = '<div class="empty">Colle ta liste ci-dessus pour commencer.</div>';
+    counter.textContent = '';
+    return;
+  }
+
+  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  counter.textContent = lines.length + ' message' + (lines.length > 1 ? 's' : '') + ' prêts';
+
+  lines.forEach(function(line, i){
+    var sep = line.indexOf(';');
+    if(sep === -1) return;
+    var phone = normalizePhone(line.slice(0, sep));
+    var message = line.slice(sep + 1).trim();
+
+    // Construction des nœuds DOM (évite les soucis d'échappement dans le HTML)
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'card-' + i;
+
+    var box = document.createElement('div');
+    box.className = 'checkbox';
+    box.textContent = '✓';
+    box.onclick = function(){ card.classList.toggle('done'); };
+
+    var content = document.createElement('div');
+    content.className = 'content';
+
+    var phoneEl = document.createElement('div');
+    phoneEl.className = 'phone';
+    phoneEl.textContent = phone;
+
+    var msgEl = document.createElement('div');
+    msgEl.className = 'msg';
+    msgEl.textContent = message;
+
+    var actions = document.createElement('div');
+    actions.className = 'actions';
+
+    var open = document.createElement('a');
+    open.className = 'open';
+    open.textContent = '📱 Ouvrir dans Messages';
+    open.href = smsUrl(phone, message);
+
+    var copyBtn = document.createElement('button');
+    copyBtn.textContent = 'Copier le texte';
+    copyBtn.onclick = function(){ copyMsg(copyBtn, message); };
+
+    actions.appendChild(open);
+    actions.appendChild(copyBtn);
+    content.appendChild(phoneEl);
+    content.appendChild(msgEl);
+    content.appendChild(actions);
+    card.appendChild(box);
+    card.appendChild(content);
+    queue.appendChild(card);
+  });
+}
+
+document.getElementById('queue').innerHTML = '<div class="empty">Colle ta liste ci-dessus pour commencer.</div>';
+</script>
+</body>
+</html>
