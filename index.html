@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prospects du jour — SMS & Vérif</title>
+<title>Prospects du jour — SMS à envoyer</title>
 <style>
   :root{
     --ink:#1c1b19;
@@ -12,10 +12,6 @@
     --accent:#2f5d50;
     --accent-soft:#e4efe9;
     --done:#9a9587;
-    --blue:#1d4ed8;
-    --blue-dark:#1731a0;
-    --ok:#15803d;
-    --ok-bg:#eafaf0;
   }
   *{box-sizing:border-box;}
   body{
@@ -38,30 +34,6 @@
     margin:0 0 20px;
     line-height:1.5;
   }
-  /* Onglets */
-  .tabs{
-    display:flex;
-    gap:6px;
-    margin-bottom:16px;
-    background:#ecebe4;
-    border-radius:10px;
-    padding:4px;
-  }
-  .tab{
-    flex:1;
-    text-align:center;
-    padding:9px 0;
-    border:none;
-    border-radius:8px;
-    background:transparent;
-    font-size:14px;
-    font-weight:600;
-    color:#6b6759;
-    cursor:pointer;
-  }
-  .tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,0.08);}
-  .pane{display:none;}
-  .pane.active{display:block;}
   textarea{
     width:100%;
     min-height:140px;
@@ -97,23 +69,24 @@
     cursor:pointer;
   }
   button.gen:hover{opacity:0.92;}
-  button.gen.blue{background:var(--blue);}
   .counter{
     display:inline-block;
     margin-left:14px;
     font-size:13px;
     color:#6b6759;
   }
-  .queue,.list{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
+  .queue{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
   .card{
     background:#fff;
     border:1px solid var(--line);
     border-radius:10px;
     padding:14px 16px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
     transition:opacity 0.2s;
   }
   .card.done{opacity:0.45;}
-  .sms-card{display:flex;align-items:flex-start;gap:12px;}
   .checkbox{
     width:20px;height:20px;
     border-radius:50%;
@@ -159,48 +132,6 @@
     color:var(--accent);
     border-color:var(--accent-soft);
   }
-  /* Carte Vérif */
-  .vcard{display:flex;align-items:center;gap:12px;}
-  .vcard-main{flex:1;min-width:0;}
-  .vcard-name{font-weight:700;font-size:14px;margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .vcard-addr{font-size:12px;color:#6b6759;margin:0 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .vcard-phone{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;}
-  .maps-btn{
-    background:var(--ink);
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    padding:9px 12px;
-    font-size:14px;
-    line-height:1;
-    cursor:pointer;
-    text-decoration:none;
-    display:inline-flex;
-  }
-  .check-label{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:34px;height:34px;
-    border-radius:8px;
-    border:1.5px solid var(--line);
-    cursor:pointer;
-    font-size:13px;
-    background:#fff;
-    user-select:none;
-  }
-  .card.done .check-label{background:var(--ok);border-color:var(--ok);color:#fff;}
-  input[type="checkbox"]{display:none;}
-  .progress{
-    position:sticky;top:0;
-    background:var(--paper);
-    padding:8px 0 12px;
-    font-size:13px;
-    font-weight:600;
-    color:#6b6759;
-    z-index:5;
-  }
-  .progress span{color:var(--blue);}
   .empty{
     text-align:center;
     color:#a39e8e;
@@ -211,58 +142,22 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Prospects du jour</h1>
-  <p class="sub">Deux outils en un : la file d'envoi SMS et la vérification Google Maps. Les prospects « À contacter » du jour sont déjà chargés ci-dessous.</p>
+  <h1>Prospects du jour — SMS</h1>
+  <p class="sub">Les messages SMS des prospects « À contacter » d'aujourd'hui sont déjà chargés ci-dessous. Clique « Ouvrir dans Messages » pour chaque contact, ou « Copier le texte » pour l'envoyer depuis ton appli.</p>
 
-  <div class="tabs">
-    <button class="tab active" id="tab-sms" onclick="showTab('sms')">📱 SMS</button>
-    <button class="tab" id="tab-verif" onclick="showTab('verif')">🔍 Vérif</button>
-  </div>
-
-  <!-- Onglet SMS -->
-  <div class="pane active" id="pane-sms">
-    <textarea id="sms-input" placeholder="0470111222;Bonjour, je m'appelle William...">0474287359;Bonjour le/la responsable du Petit Boucher, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
-0495327615;Bonjour le/la responsable du Caroline Hair Beauty, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
-0496154851;Bonjour le/la responsable du Bi&#x27;Oh, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
-0485223153;Bonjour le/la responsable du shopping de Célia, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
-0475826413;Bonjour le/la responsable du A.a.g., je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
-0455102542;Bonjour le/la responsable du Boulangerie oriental Le monde حلال Halal Certified, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
+  <textarea id="input" placeholder="0470111222;Bonjour, je m'appelle William...">0455102542;Bonjour le/la responsable du Boulangerie oriental Le monde حلال Halal Certified, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
 0488862492;Bonjour le/la responsable du Nail&#x27;s Beauty, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
 0477827130;Bonjour le/la responsable du Visualbaby, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William
 0471520486;Bonjour le/la responsable du Autoland, je m&#x27;appelle William, je crée des sites internet pour les petites entreprises en Belgique 👋 Vos clients ne trouvent pas vos produits ni vos coordonnées sur Internet — je vous prépare une maquette gratuite de site vitrine avec vos produits et vos coordonnées en 24h. Ça vous dit ? On en discute par SMS, vous m&#x27;envoyez votre email pour que je vous envoie des exemples, ou on s&#x27;appelle. C&#x27;est comme vous voulez. Très bonne journée. William</textarea>
-    <div class="format">Format : <code>numéro;message</code> — un prospect par ligne, séparés par un point-virgule. Les numéros belges commençant par 0 sont convertis automatiquement en +32.</div>
-    <button class="gen" onclick="generateSMS()">Générer la file</button>
-    <span class="counter" id="sms-counter"></span>
-    <div class="queue" id="sms-queue"></div>
-  </div>
+  <div class="format">Format : <code>numéro;message</code> — un prospect par ligne. Les numéros belges commençant par 0 sont convertis automatiquement en +32.</div>
 
-  <!-- Onglet Vérif -->
-  <div class="pane" id="pane-verif">
-    <textarea id="verif-input" placeholder="Nom du commerce;Adresse ou Commune;Téléphone">Le Petit Boucher;Rue de la Régence 31, 6000 Charleroi, Belgium;0474287359
-Caroline Hair Beauty;22, Avenue de l&#x27;Europe;0495327615
-Bi&#x27;Oh;Rue Moraifosse 7, 4802 Verviers, Belgium;0496154851
-Le shopping de Célia;Rue de Jalhay 30, 4801 Verviers, Belgium;0485223153
-A.a.g.;Rue en Bois 19/A, 4000 Liège, Belgium;0475826413
-Boulangerie oriental Le monde حلال Halal Certified;Rue Neuve 33, 6000 Charleroi, Belgium;0455102542
-Nail&#x27;s Beauty;Courte Rue des Fontaines 69, 1300 Wavre, Belgium;0488862492
-Visualbaby;Rue des Dominicains 26B, 7000 Mons, Belgium;0477827130
-Autoland;Rue de la Colonne 1a, 1080 Bruxelles, Belgium;0471520486</textarea>
-    <div class="format">Format : <code>Nom;Adresse ou Commune;Téléphone</code> — un prospect par ligne. Un clic sur 🔍 ouvre la fiche Google Maps du commerce.</div>
-    <button class="gen blue" onclick="generateVerif()">Générer la liste</button>
-    <div class="progress" id="verif-progress"></div>
-    <div class="list" id="verif-list"></div>
-  </div>
+  <button class="gen" onclick="generate()">Générer la file</button>
+  <span class="counter" id="counter"></span>
+
+  <div class="queue" id="queue"></div>
 </div>
 
 <script>
-function showTab(name){
-  document.getElementById('tab-sms').classList.toggle('active', name==='sms');
-  document.getElementById('tab-verif').classList.toggle('active', name==='verif');
-  document.getElementById('pane-sms').classList.toggle('active', name==='sms');
-  document.getElementById('pane-verif').classList.toggle('active', name==='verif');
-}
-
-// ---------- SMS ----------
 function normalizePhone(raw){
   var p = raw.trim().replace(/[\s.\-]/g,'');
   if(p.indexOf('+') === 0) return p;
@@ -295,10 +190,10 @@ function fallbackCopy(text, done){
   try { document.execCommand('copy'); done(); } catch(e){}
   document.body.removeChild(ta);
 }
-function generateSMS(){
-  var raw = document.getElementById('sms-input').value.trim();
-  var queue = document.getElementById('sms-queue');
-  var counter = document.getElementById('sms-counter');
+function generate(){
+  var raw = document.getElementById('input').value.trim();
+  var queue = document.getElementById('queue');
+  var counter = document.getElementById('counter');
   queue.innerHTML = '';
   if(!raw){
     queue.innerHTML = '<div class="empty">Colle ta liste ci-dessus pour commencer.</div>';
@@ -313,7 +208,7 @@ function generateSMS(){
     var phone = normalizePhone(line.slice(0, sep));
     var message = line.slice(sep + 1).trim();
     var card = document.createElement('div');
-    card.className = 'card sms-card';
+    card.className = 'card';
     card.id = 'card-' + i;
     var box = document.createElement('div');
     box.className = 'checkbox';
@@ -346,88 +241,7 @@ function generateSMS(){
     queue.appendChild(card);
   });
 }
-
-// ---------- Vérif ----------
-function escapeHtml(str){
-  var d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
-function updateVerifProgress(){
-  var total = document.querySelectorAll('#verif-list .card').length;
-  var done = document.querySelectorAll('#verif-list .card.done').length;
-  var el = document.getElementById('verif-progress');
-  el.innerHTML = total ? '<span>' + done + '</span> / ' + total + ' vérifiés' : '';
-}
-function toggleVerifDone(i){
-  var card = document.getElementById('vcard-' + i);
-  var chk = document.getElementById('vchk-' + i);
-  card.classList.toggle('done', chk.checked);
-  updateVerifProgress();
-}
-function generateVerif(){
-  var raw = document.getElementById('verif-input').value;
-  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
-  var list = document.getElementById('verif-list');
-  list.innerHTML = '';
-  if(lines.length === 0){
-    list.innerHTML = '<div class="empty">Colle une liste au format Nom;Adresse;Téléphone puis clique "Générer la liste".</div>';
-    updateVerifProgress();
-    return;
-  }
-  lines.forEach(function(line, i){
-    var parts = line.split(';').map(function(p){ return p.trim(); });
-    var nom = parts[0], adresse = parts[1] || '', tel = parts[2] || '';
-    if(!nom) return;
-    var query = encodeURIComponent(nom + ' ' + adresse + ' Belgique');
-    var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + query;
-    var card = document.createElement('div');
-    card.className = 'card vcard';
-    card.id = 'vcard-' + i;
-    var main = document.createElement('div');
-    main.className = 'vcard-main';
-    var nameEl = document.createElement('p');
-    nameEl.className = 'vcard-name';
-    nameEl.textContent = nom;
-    var addrEl = document.createElement('p');
-    addrEl.className = 'vcard-addr';
-    addrEl.textContent = adresse;
-    var phoneEl = document.createElement('p');
-    phoneEl.className = 'vcard-phone';
-    phoneEl.textContent = tel || '—';
-    main.appendChild(nameEl);
-    main.appendChild(addrEl);
-    main.appendChild(phoneEl);
-    var acts = document.createElement('div');
-    acts.className = 'actions';
-    var maps = document.createElement('a');
-    maps.className = 'maps-btn';
-    maps.textContent = '🔍';
-    maps.href = mapsUrl;
-    maps.target = '_blank';
-    maps.rel = 'noopener';
-    var label = document.createElement('label');
-    label.className = 'check-label';
-    label.setAttribute('for', 'vchk-' + i);
-    var inp = document.createElement('input');
-    inp.type = 'checkbox';
-    inp.id = 'vchk-' + i;
-    inp.onchange = function(){ toggleVerifDone(i); };
-    var mark = document.createElement('span');
-    mark.textContent = '✓';
-    label.appendChild(inp);
-    label.appendChild(mark);
-    acts.appendChild(maps);
-    acts.appendChild(label);
-    card.appendChild(main);
-    card.appendChild(acts);
-    list.appendChild(card);
-  });
-  updateVerifProgress();
-}
-
-generateSMS();
-generateVerif();
+generate();
 </script>
 </body>
 </html>
